@@ -16,8 +16,8 @@
     {% if input_character %}
         <p>Top 10 characters similar to {{ input_character }}:</p>
         <ul>
-            {% for character in similar_characters_cosine %}
-                <li>{{ character }}</li>
+            {% for character, image_url in similar_characters_cosine %}
+                <li>{{ character }} - <img src="{{ image_url }}" alt="{{ character }}"></li>
             {% endfor %}
         </ul>
     {% endif %}

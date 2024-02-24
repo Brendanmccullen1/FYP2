@@ -5,10 +5,61 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Stores Near You</title>
+
+    <!-- Include Leaflet CSS and JS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+    <!-- Include jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+    <!-- Geolocation script -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const latitude = {{ latitude }};
+    const longitude = {{ longitude }};
+
+    // Initialize the map
+    const map = L.map('map').setView([latitude, longitude], 13);
+
+    // Add the tile layer (you can use other tile providers)
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
+
+    // Add a marker for Dublin
+    L.marker([latitude, longitude]).addTo(map)
+        .bindPopup('Dublin').openPopup();
+
+    // Send AJAX request to get store recommendations
+    $.ajax({
+        url: `/stores_near_you/?latitude=${latitude}&longitude=${longitude}`,
+        method: 'GET',
+        dataType: 'json', // Ensure that the response is treated as JSON
+        success: function (data) {
+            // Update the HTML with the recommended stores
+            const storesList = $('#stores-list');
+            storesList.empty();
+            data.recommended_stores.forEach(store => {
+                storesList.append(`<li>${store.name} - ${store.address}</li>`);
+            });
+        },
+        error: function (error) {
+            console.error('Error fetching recommendations:', error);
+        }
+    });
+});
+</script>
 </head>
 <body>
     <h1>Stores Near You</h1>
     <p>Find our products at stores near you!</p>
-    <!-- Add store locator or store information here -->
+
+    <!-- Map container -->
+    <div id="map" style="height: 400px;"></div>
+
+    <!-- Recommended stores list -->
+    <h2>Recommended Stores</h2>
+    <ul id="stores-list"></ul>
 </body>
 </html>
