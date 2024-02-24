@@ -1,0 +1,23 @@
+<!-- myapp/templates/home.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+</head>
+<body>
+    <h1>Welcome to the Recommendation Service!</h1>
+    <p>This is a simple recommendation service home page.</p>
+
+    <!-- Navigation Links -->
+    <ul>
+        <li><a href="{% url 'home' %}">Home</a></li>
+        <li><a href="{% url 'recommendations' %}">Recommendations</a></li>
+        <li><a href="{% url 'contact_us' %}">Contact Us</a></li>
+        <li><a href="{% url 'stores_near_you' %}">Stores Near You</a></li>
+        <li><a href="{% url 'recommendation_page' %}">Character Recommendation</a></li>
+
+    </ul>
+</body>
+</html>

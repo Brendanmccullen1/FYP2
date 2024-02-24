@@ -1,0 +1,26 @@
+<!-- myapp/templates/recommendation_page.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Character Recommendations</title>
+</head>
+<body>
+    <form method="post" action="{% url 'recommendation_page' %}">
+        {% csrf_token %}
+        {{ form }}
+        <input type="submit" value="Get Recommendations">
+    </form>
+
+    {% if input_character %}
+        <p>Top 10 characters similar to {{ input_character }}:</p>
+        <ul>
+            {% for character in similar_characters_cosine %}
+                <li>{{ character }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+</body>
+</html>
