@@ -1,6 +1,11 @@
-# myapp/utils/recommendation.py
-import pandas as pd
 import numpy as np
+from bs4 import BeautifulSoup
+import requests
+import re
+import pandas as pd
+from urllib.parse import quote
+import time
+
 
 def calculate_cosine_similarity_matrix(x):
     norm = np.linalg.norm(x, axis=1, keepdims=True)
@@ -45,7 +50,8 @@ def find_similar_characters_cosine(input_name, df, top_n=10, n_clusters=10):
     similar_characters = similar_characters[similar_characters['Name'] != input_name]
 
     if similar_characters.empty:
-        return f"No similar characters found for {input_name} within the given clustering."
+        print(f"No similar characters found for {input_name} within the given clustering.")
+        return []
 
     input_attributes_index = df[df['Name'] == input_name].index[0]
     similarities = cosine_similarity_matrix_result[input_attributes_index, similar_characters.index]
@@ -55,3 +61,32 @@ def find_similar_characters_cosine(input_name, df, top_n=10, n_clusters=10):
     most_similar_characters = similar_characters.head(top_n)['Name'].tolist()
 
     return most_similar_characters
+
+
+
+def get_wikipedia_image(character, base_url="https://en.wikipedia.org/wiki/"):
+    try:
+        # Search on Wikipedia
+        query = character.replace(" ", "_")
+        search_url = f"{base_url}{quote(query)}"
+        response = requests.get(search_url)
+        response.raise_for_status()
+
+        soup = BeautifulSoup(response.content, 'html.parser')
+        infobox = soup.find('table', {'class': 'infobox'})
+
+        if infobox:
+            image_elements = infobox.find_all('img', {'src': re.compile(r'^//upload\.wikimedia\.org/')})
+            if image_elements:
+                image_url = 'https:' + image_elements[0].get('src')
+                return image_url
+            else:
+                print(f"No image found in the infobox for {character} on Wikipedia")
+                return None
+        else:
+            print(f"No infobox found for {character} on Wikipedia")
+            return None
+
+    except requests.HTTPError as e_wikipedia:
+        print(f"Failed to fetch Wikipedia page for {character}. Status code: {e_wikipedia.response.status_code}")
+        return None
