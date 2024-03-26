@@ -1,23 +1,182 @@
-<!-- myapp/templates/home.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        /* Reset default browser styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+            font-family: 'Knewave', cursive;
+        }
+
+        .banner {
+            background-color: #007bff; /* Comic book blue */
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .banner h1 {
+            font-size: 36px;
+            margin-bottom: 10px;
+        }
+
+        nav ul {
+            list-style-type: none;
+            display: flex;
+            align-items: center;
+        }
+
+        nav ul li {
+            margin-right: 20px;
+        }
+
+        nav ul li a {
+            color: #fff;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        nav ul li a:hover {
+            color: #f0f0f0;
+        }
+
+        .search-bar {
+            position: relative;
+        }
+
+        .search-bar input[type="text"] {
+            padding: 10px 15px;
+            border: 2px solid #ddd;
+            color: #333;
+            font-size: 16px;
+            font-family: 'Knewave', cursive;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            width: 200px;
+            height: 40px;
+            border-radius: 20px;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+        .search-bar input[type="text"]:focus {
+            border-color: #007bff;
+        }
+
+        .search-bar ul {
+            position: absolute;
+            top: 50px;
+            left: 0;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 10px 0;
+            display: none;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .search-bar ul li {
+            padding: 10px 15px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .search-bar ul li:hover {
+            background-color: #f0f0f0;
+        }
+
+        .search-bar input[type="text"]:focus + ul {
+            display: block;
+        }
+
+        .comic-covers {
+            display: flex;
+            justify-content: space-between;
+            padding: 20px;
+        }
+
+        .comic-cover img {
+            max-width: 200px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .comic-cover img:hover {
+            transform: scale(1.05);
+        }
+
+        .text-content {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        .text-content h2 {
+            font-size: 32px;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .text-content p {
+            font-size: 18px;
+            line-height: 1.6;
+            color: #666;
+        }
+    </style>
 </head>
 <body>
-    <h1>Welcome to the Recommendation Service!</h1>
-    <p>This is a simple recommendation service home page.</p>
-
-    <!-- Navigation Links -->
-    <ul>
-        <li><a href="{% url 'home' %}">Home</a></li>
-        <li><a href="{% url 'recommendations' %}">Recommendations</a></li>
-        <li><a href="{% url 'contact_us' %}">Contact Us</a></li>
-        <li><a href="{% url 'stores_near_you' %}">Stores Near You</a></li>
-        <li><a href="{% url 'recommendation_page' %}">Character Recommendation</a></li>
-
-    </ul>
+    <header class="banner">
+        <h1>Find Your Best Comic Book</h1>
+        <nav>
+            <ul>
+                <li><a href="{% url 'home' %}">Home</a></li>
+                <li><a href="{% url 'recommendations' %}">Recommendations</a></li>
+                <li><a href="{% url 'contact_us' %}">Contact Us</a></li>
+                <li><a href="{% url 'stores_near_you' %}">Stores Near You</a></li>
+                <li><a href="{% url 'recommendation_page' %}">Character Recommendation</a></li>
+                <li class="search-bar">
+                    <input type="text" placeholder="Search">
+                    <ul>
+                        <!-- Your search results will go here -->
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+    </header>
+    <section class="main-content">
+        <div class="text-content">
+            <h2>Discover the World of Comics</h2>
+            <p>Welcome to our comic book and character recommendation website! Dive into the thrilling world of comics with us and discover a universe filled with captivating stories, iconic characters, and breathtaking artwork. Whether you're a seasoned comic enthusiast or just starting your journey, our site offers curated recommendations to suit every taste. Explore our vast collection of comics, find hidden gems, and uncover new favorites. Plus, our character recommendation feature helps you discover heroes and villains tailored to your preferences. Join us as we embark on an epic adventure through the pages of comic history. Start exploring today and unleash your inner superhero!</p>
+        </div>
+        <div class="comic-covers">
+            <div class="comic-cover">
+                <img src="https://upload.wikimedia.org/wikipedia/en/0/08/Secretwars1.png" alt="Comic Book 1">
+            </div>
+            <div class="comic-cover">
+                <img src="https://upload.wikimedia.org/wikipedia/en/a/a9/Cover_of_Superman_Comic_1st_Edition_-_Summer_1939.jpg" alt="Comic Book 2">
+            </div>
+            <div class="comic-cover">
+                <img src="https://upload.wikimedia.org/wikipedia/en/6/6d/Wolverine_%28vol._1%29_1.jpg" alt="Comic Book 3">
+            </div>
+        </div>
+    </section>
 </body>
 </html>
