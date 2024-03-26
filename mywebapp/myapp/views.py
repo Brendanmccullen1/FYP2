@@ -4,7 +4,8 @@ from django.shortcuts import render, redirect
 import pandas as pd
 from .forms import CharacterInputForm
 from .models import ComicBookStore
-from .utils.recommendation import find_similar_characters_cosine, get_wikipedia_image
+from .utils.recommendation import find_similar_characters_cosine, get_wikipedia_image, get_dc_fandom_image, \
+    get_marvel_fandom_image
 from .utils.stores import get_nearby_stores as utils_get_nearby_stores, get_nearby_stores
 from .utils.recommendation import find_similar_characters_cosine
 
@@ -25,10 +26,10 @@ import pandas as pd
 from .forms import CharacterInputForm
 from .utils.recommendation import find_similar_characters_cosine
 
+
 def recommendation_page(request):
     input_character = ''
     similar_characters_cosine = []
-    image_urls = []
 
     if request.method == 'POST':
         form = CharacterInputForm(request.POST)
@@ -36,13 +37,25 @@ def recommendation_page(request):
             input_character = form.cleaned_data['character'].strip()
             df = pd.read_csv('myapp/datasets/superheroes_power_matrix.csv')
             similar_characters_cosine = find_similar_characters_cosine(input_character, df)
+
             # Generate image URLs for the similar characters
+            image_urls = []
             for character in similar_characters_cosine:
-                image_url = get_wikipedia_image(character)
-                if image_url:
-                    image_urls.append(image_url)
-                else:
-                    print(f"Failed to fetch image for {character} from Wikipedia")
+                # Get image URL from Wikipedia
+                image_url = get_marvel_fandom_image(character)
+                if not image_url:
+                    # If image not found on Wikipedia, try DC Fandom
+                    image_url = get_dc_fandom_image(character)
+                    if not image_url:
+                        # If image not found on DC Fandom, try Marvel Fandom
+                        image_url = get_wikipedia_image(character)
+                        if not image_url:
+                            # If image not found on any website, set a placeholder image
+                            image_url = 'https://via.placeholder.com/150'  # Placeholder image URL
+                            # Alternatively, you can display a message indicating that the image could not be found
+                            # image_url = None  # Set image_url to None if you want to display a message in the template
+                image_urls.append(image_url)
+
             # Prepare context for rendering
             context = {
                 'form': form,
@@ -57,7 +70,7 @@ def recommendation_page(request):
     context = {
         'form': form,
         'input_character': input_character,
-        'similar_characters_cosine': zip(similar_characters_cosine, image_urls),
+        'similar_characters_cosine': zip(similar_characters_cosine, []),
     }
 
     return render(request, 'recommendation_page.html', context)

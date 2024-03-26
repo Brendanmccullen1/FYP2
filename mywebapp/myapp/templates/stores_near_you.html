@@ -5,6 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Stores Near Me</title>
     <style>
+        /* Reset default browser styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
             font-family: Arial, sans-serif;
             margin: 0;
@@ -18,6 +25,9 @@
             color: #fff;
             padding: 20px;
             text-align: center;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
         .banner h1 {
@@ -25,29 +35,103 @@
             margin-bottom: 10px;
         }
 
+        nav ul {
+            list-style-type: none;
+            display: flex;
+            align-items: center;
+        }
+
+        nav ul li {
+            margin-right: 20px;
+        }
+
+        nav ul li a {
+            color: #fff;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        nav ul li a:hover {
+            color: #f0f0f0;
+        }
+
+        .search-bar {
+            position: relative;
+        }
+
+        .search-bar input[type="text"] {
+            padding: 10px 15px;
+            border: 2px solid #ddd;
+            color: #333;
+            font-size: 16px;
+            font-family: 'Knewave', cursive;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            width: 200px;
+            height: 40px;
+            border-radius: 20px;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+        .search-bar input[type="text"]:focus {
+            border-color: #007bff;
+        }
+
+        .search-bar ul {
+            position: absolute;
+            top: 50px;
+            left: 0;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 10px 0;
+            display: none;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .search-bar ul li {
+            padding: 10px 15px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .search-bar ul li:hover {
+            background-color: #f0f0f0;
+        }
+
+        .search-bar input[type="text"]:focus + ul {
+            display: block;
+        }
+
         #map {
             height: 400px;
             width: 100%;
-            margin: 0 auto;
         }
     </style>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCNMNLMPlaPfeBnnJQtBQBSXAOIpMMHzJg&libraries=places&callback=initMap" async defer></script>
     <script>
         var map;
+        var directionsService;
+        var directionsRenderer;
 
         function initMap() {
-            // Coordinates for Dublin city center
-            var dublinCityCenter = { lat: 53.349805, lng: -6.26031 };
+            // Coordinates for your location (replace with actual coordinates)
+            var myLocation = { lat: 53.349805, lng: -6.26031 };
 
             map = new google.maps.Map(document.getElementById('map'), {
-                center: dublinCityCenter,
+                center: myLocation,
                 zoom: 14
             });
+
+            directionsService = new google.maps.DirectionsService();
+            directionsRenderer = new google.maps.DirectionsRenderer();
+            directionsRenderer.setMap(map);
 
             // Fetch store locations from Google Places API
             var service = new google.maps.places.PlacesService(map);
             service.nearbySearch({
-                location: dublinCityCenter,
+                location: myLocation,
                 radius: 5000, // 5 kilometers
                 type: ['book_store'], // Search for book stores (including comic book stores)
                 keyword: 'comic' // Filter by keyword 'comic' to specifically find comic book stores
@@ -70,17 +154,52 @@
             var infowindow = new google.maps.InfoWindow();
 
             google.maps.event.addListener(marker, 'click', function () {
-                infowindow.setContent('<div><strong>' + place.name + '</strong><br>' +
+                var content = '<div><strong>' + place.name + '</strong><br>' +
                     'Address: ' + place.vicinity + '<br>' +
-                    'Rating: ' + (place.rating || 'N/A') + '</div>');
+                    'Rating: ' + (place.rating || 'N/A') + '</div>' +
+                    '<br><button onclick="addRoute(' + place.geometry.location.lat() + ', ' + place.geometry.location.lng() + ')">Add Route</button>';
+                infowindow.setContent(content);
                 infowindow.open(map, this);
             });
         }
-    </script>
+
+        function addRoute(destLat, destLng) {
+            var destination = { lat: destLat, lng: destLng };
+
+            if (confirm("Do you want to add a route to this store?")) {
+                calculateAndDisplayRoute(destination);
+            }
+        }
+
+        function calculateAndDisplayRoute(destination) {
+            directionsService.route({
+                origin: map.getCenter(),
+                destination: destination,
+                travelMode: 'DRIVING'
+            }, function (response, status) {
+                if (status === 'OK') {
+                    directionsRenderer.setDirections(response);
+                } else {
+                    window.alert('Directions requestfailed due to ' + status);
+}
+});
+}
+</script>
+
 </head>
 <body>
-    <header class="banner">
-        <h1>Stores Near Me</h1>
+<header class="banner">
+        <h1>Find Your Best Comic Book</h1>
+        <nav>
+            <ul>
+                <li><a href="{% url 'home' %}">Home</a></li>
+                <li><a href="{% url 'recommendations' %}">Recommendations</a></li>
+                <li><a href="{% url 'contact_us' %}">Contact Us</a></li>
+                <li><a href="{% url 'stores_near_you' %}">Stores Near You</a></li>
+                <li><a href="{% url 'recommendation_page' %}">Character Recommendation</a></li>
+                <!-- Add more relevant links here -->
+            </ul>
+        </nav>
     </header>
     <div id="map"></div>
 </body>

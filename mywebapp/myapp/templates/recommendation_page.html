@@ -1,26 +1,192 @@
-<!-- myapp/templates/recommendation_page.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Character Recommendations</title>
+    <style>
+        /* Reset default browser styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+            font-family: 'Knewave', cursive;
+        }
+
+        .banner {
+            background-color: #007bff; /* Comic book blue */
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .banner h1 {
+            font-size: 36px;
+            margin-bottom: 10px;
+        }
+
+        nav ul {
+            list-style-type: none;
+            display: flex;
+            align-items: center;
+        }
+
+        nav ul li {
+            margin-right: 20px;
+        }
+
+        nav ul li a {
+            color: #fff;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        nav ul li a:hover {
+            color: #f0f0f0;
+        }
+
+        .search-bar {
+            position: relative;
+        }
+
+        .search-bar input[type="text"] {
+            padding: 10px 15px;
+            border: 2px solid #ddd;
+            color: #333;
+            font-size: 16px;
+            font-family: 'Knewave', cursive;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            width: 200px;
+            height: 40px;
+            border-radius: 20px;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+        .search-bar input[type="text"]:focus {
+            border-color: #007bff;
+        }
+
+        .search-bar ul {
+            position: absolute;
+            top: 50px;
+            left: 0;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 10px 0;
+            display: none;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .search-bar ul li {
+            padding: 10px 15px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .search-bar ul li:hover {
+            background-color: #f0f0f0;
+        }
+
+        .search-bar input[type="text"]:focus + ul {
+            display: block;
+        }
+
+        .main-content {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        .main-content h2 {
+            font-size: 32px;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .main-content p {
+            font-size: 18px;
+            line-height: 1.6;
+            color: #666;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .grid-item {
+            text-align: center;
+        }
+
+        .grid-item img {
+            max-width: 200px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .grid-item img:hover {
+            transform: scale(1.05);
+        }
+
+        .grid-item p {
+            margin-top: 10px;
+        }
+    </style>
 </head>
 <body>
-    <form method="post" action="{% url 'recommendation_page' %}">
-        {% csrf_token %}
-        {{ form }}
-        <input type="submit" value="Get Recommendations">
-    </form>
+    <header class="banner">
+        <h1>Find Your Best Comic Book</h1>
+        <nav>
+            <ul>
+                <li><a href="{% url 'home' %}">Home</a></li>
+                <li><a href="{% url 'recommendations' %}">Recommendations</a></li>
+                <li><a href="{% url 'contact_us' %}">Contact Us</a></li>
+                <li><a href="{% url 'stores_near_you' %}">Stores Near You</a></li>
+                <li><a href="{% url 'recommendation_page' %}">Character Recommendation</a></li>
+                <li class="search-bar">
+                    <input type="text" placeholder="Search">
+                    <ul>
+                        <!-- Your search results will go here -->
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+    </header>
+    <section class="main-content">
+        <form method="post" action="{% url 'recommendation_page' %}">
+            {% csrf_token %}
+            {{ form }}
+            <input type="submit" value="Get Recommendations">
+        </form>
 
-    {% if input_character %}
-        <p>Top 10 characters similar to {{ input_character }}:</p>
-        <ul>
-            {% for character, image_url in similar_characters_cosine %}
-                <li>{{ character }} - <img src="{{ image_url }}" alt="{{ character }}"></li>
-            {% endfor %}
-        </ul>
-    {% endif %}
-
+        {% if input_character %}
+            <p>Top 10 characters similar to {{ input_character }}:</p>
+            <div class="grid-container">
+                {% for character, image_url in similar_characters_cosine %}
+                    <div class="grid-item">
+                        <img src="{{ image_url }}" alt="{{ character }}">
+                        <p>{{ character }}</p>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </section>
 </body>
 </html>

@@ -29,7 +29,7 @@ def kmeans(x, n_clusters, random_state=42):
 
     return labels
 
-def find_similar_characters_cosine(input_name, df, top_n=10, n_clusters=10):
+def find_similar_characters_cosine(input_name, df, top_n=9, n_clusters=9):
     if df.empty:
         return f"The DataFrame is empty. Please make sure your CSV file contains data."
 
@@ -89,4 +89,53 @@ def get_wikipedia_image(character, base_url="https://en.wikipedia.org/wiki/"):
 
     except requests.HTTPError as e_wikipedia:
         print(f"Failed to fetch Wikipedia page for {character}. Status code: {e_wikipedia.response.status_code}")
+        return None
+
+def get_dc_fandom_image(character, base_url="https://dc.fandom.com/wiki/"):
+    try:
+        # Search on DC Fandom
+        query = character.replace(" ", "_")
+        search_url = f"{base_url}{quote(query)}"
+        response = requests.get(search_url)
+        response.raise_for_status()
+
+        soup = BeautifulSoup(response.content, 'html.parser')
+        image_element = soup.find('a', {'class': 'image'})
+
+        if image_element:
+            image_url = image_element.find('img')['src']
+            return image_url
+        else:
+            print(f"No image found for {character} on DC Fandom")
+            return None
+
+    except requests.HTTPError as e_dc_fandom:
+        print(f"Failed to fetch DC Fandom page for {character}. Status code: {e_dc_fandom.response.status_code}")
+        return None
+
+def get_marvel_fandom_image(character, base_url="https://marvel.fandom.com/wiki/"):
+    try:
+        # Search on Marvel Fandom
+        query = character.replace(" ", "_")
+        search_url = f"{base_url}{query}"
+        response = requests.get(search_url)
+        response.raise_for_status()
+
+        soup = BeautifulSoup(response.content, 'html.parser')
+        infobox = soup.find('aside', {'class': 'portable-infobox pi-background pi-europa pi-theme-wikia pi-layout-default pi-item-spacing pi-border-color'})
+
+        if infobox:
+            image_element = infobox.find('img', {'class': 'pi-image-thumbnail'})
+            if image_element:
+                image_url = image_element.get('src')
+                return image_url
+            else:
+                print(f"No image found in the infobox for {character} on Marvel Fandom")
+                return None
+        else:
+            print(f"No infobox found for {character} on Marvel Fandom")
+            return None
+
+    except requests.HTTPError as e_marvel_fandom:
+        print(f"Failed to fetch Marvel Fandom page for {character}. Status code: {e_marvel_fandom.response.status_code}")
         return None
