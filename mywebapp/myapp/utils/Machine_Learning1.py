@@ -2,17 +2,15 @@ import pandas as pd
 import numpy as np
 import re
 
-# Load dataset
+# Load dataset into df_webtoon DataFrame
+df_webtoon = pd.read_csv('myapp/datasets/Webtoon Dataset.csv')
 
 # Text Preprocessing
 def preprocess_text(text):
-    # Convert text to lowercase
     text = text.lower()
-    # Remove punctuation
     text = re.sub(r'[^\w\s]', '', text)
     return text
 
-# Apply preprocessing to the 'Summary' column
 df_webtoon['Processed_Summary'] = df_webtoon['Summary'].apply(preprocess_text)
 
 # Create vocabulary
@@ -20,12 +18,11 @@ vocabulary = set()
 for summary in df_webtoon['Processed_Summary']:
     vocabulary.update(summary.split())
 
-# Map each word to an index
 word_to_index = {word: i for i, word in enumerate(vocabulary)}
 index_to_word = {i: word for word, i in word_to_index.items()}
 
 # Compute term frequency (TF)
-# tf_matrix = np.zeros((len(df_webtoon), len(vocabulary)))
+tf_matrix = np.zeros((len(df_webtoon), len(vocabulary)))
 for i, summary in enumerate(df_webtoon['Processed_Summary']):
     words = summary.split()
     for word in words:
@@ -37,31 +34,27 @@ df_matrix = np.sum(tf_matrix > 0, axis=0)
 
 # Compute inverse document frequency (IDF)
 num_documents = len(df_webtoon)
-idf_matrix = np.log(num_documents / (df_matrix + 1))  # Add 1 to avoid division by zero
+idf_matrix = np.log(num_documents / (df_matrix + 1))
 
 # Compute TF-IDF matrix
 tfidf_matrix = tf_matrix * idf_matrix
 
 # Compute Cosine Similarity Matrix
-def cosine_similarity(vector1, vector2):
-    dot_product = np.dot(vector1, vector2)
-    norm_vector1 = np.linalg.norm(vector1)
-    norm_vector2 = np.linalg.norm(vector2)
-    return dot_product / (norm_vector1 * norm_vector2)
+def compute_cosine_similarity_matrix(tfidf_matrix):
+    norm_matrix = np.linalg.norm(tfidf_matrix, axis=1, keepdims=True)
+    normalized_tfidf = tfidf_matrix / norm_matrix
+    return np.dot(normalized_tfidf, normalized_tfidf.T)
 
-cosine_sim_matrix = np.zeros((len(df_webtoon), len(df_webtoon)))
-for i in range(len(df_webtoon)):
-    for j in range(len(df_webtoon)):
-        cosine_sim_matrix[i][j] = cosine_similarity(tfidf_matrix[i], tfidf_matrix[j])
+cosine_sim_matrix = compute_cosine_similarity_matrix(tfidf_matrix)
 
-def find_similar_webtoons(input_name, df, top_n=9, n_clusters=9):
+def find_similar_webtoons(input_name, df, cosine_sim_matrix, top_n=9):
     if df.empty:
-        return f"The DataFrame is empty. Please make sure your CSV file contains data."
+        return []
 
     if input_name not in df['Name'].values:
-        return f"The input webtoon {input_name} was not found in the DataFrame."
+        return []
 
-    idx = df[df['Name'] == input_name].index[0]
+    idx = df.index[df['Name'] == input_name][0]
 
     sim_scores = list(enumerate(cosine_sim_matrix[idx]))
     sim_scores = sorted(sim_scores, key=lambda x: x[1], reverse=True)
@@ -73,5 +66,5 @@ def find_similar_webtoons(input_name, df, top_n=9, n_clusters=9):
     return similar_webtoons
 
 # Example: Get similar webtoons to a given webtoon title
-similar_webtoons = find_similar_webtoons('The Nuna at Our Office', df_webtoon)
+similar_webtoons = find_similar_webtoons('The Nuna at Our Office', df_webtoon, cosine_sim_matrix)
 print(similar_webtoons)
