@@ -3,7 +3,6 @@ import numpy as np
 import re
 
 # Load dataset
-df_webtoon = pd.read_csv('../datasets/Webtoon Dataset.csv', encoding='latin1')
 
 # Text Preprocessing
 def preprocess_text(text):
@@ -26,7 +25,7 @@ word_to_index = {word: i for i, word in enumerate(vocabulary)}
 index_to_word = {i: word for word, i in word_to_index.items()}
 
 # Compute term frequency (TF)
-tf_matrix = np.zeros((len(df_webtoon), len(vocabulary)))
+# tf_matrix = np.zeros((len(df_webtoon), len(vocabulary)))
 for i, summary in enumerate(df_webtoon['Processed_Summary']):
     words = summary.split()
     for word in words:
@@ -55,18 +54,24 @@ for i in range(len(df_webtoon)):
     for j in range(len(df_webtoon)):
         cosine_sim_matrix[i][j] = cosine_similarity(tfidf_matrix[i], tfidf_matrix[j])
 
-# Recommendation Function
-def get_similar_comics(title, cosine_sim_matrix, titles):
-    if title not in titles.values:
-        print(f"Comic '{title}' not found.")
-        return []
-    idx = titles[titles == title].index[0]
+def find_similar_webtoons(input_name, df, top_n=9, n_clusters=9):
+    if df.empty:
+        return f"The DataFrame is empty. Please make sure your CSV file contains data."
+
+    if input_name not in df['Name'].values:
+        return f"The input webtoon {input_name} was not found in the DataFrame."
+
+    idx = df[df['Name'] == input_name].index[0]
+
     sim_scores = list(enumerate(cosine_sim_matrix[idx]))
     sim_scores = sorted(sim_scores, key=lambda x: x[1], reverse=True)
-    sim_scores = sim_scores[1:11]  # Top 10 similar comics
-    comic_indices = [i[0] for i in sim_scores]
-    return df_webtoon.iloc[comic_indices]['Name']
+    sim_scores = sim_scores[1:top_n+1]  # Top N similar webtoons
 
-# Example: Get similar comics to a given comic title
-similar_comics = get_similar_comics('The Nuna at Our Office', cosine_sim_matrix, df_webtoon['Name'])
-print(similar_comics)
+    comic_indices = [i[0] for i in sim_scores]
+    similar_webtoons = df.iloc[comic_indices]['Name'].tolist()
+
+    return similar_webtoons
+
+# Example: Get similar webtoons to a given webtoon title
+similar_webtoons = find_similar_webtoons('The Nuna at Our Office', df_webtoon)
+print(similar_webtoons)

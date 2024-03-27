@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Character Recommendations</title>
+    <title>Webtoon Recommendations</title>
     <style>
         /* Reset default browser styles */
         * {
@@ -152,14 +152,13 @@
 </head>
 <body>
     <header class="banner">
-        <h1>Find Your Best Comic Book</h1>
+        <h1>Find Your Best Webtoon</h1>
         <nav>
             <ul>
                 <li><a href="{% url 'home' %}">Home</a></li>
                 <li><a href="{% url 'webtoon_recommendation_page' %}">webtoons</a></li>
                 <li><a href="{% url 'contact_us' %}">Contact Us</a></li>
                 <li><a href="{% url 'stores_near_you' %}">Stores Near You</a></li>
-                <li><a href="{% url 'recommendation_page' %}">Character Recommendation</a></li>
                 <li class="search-bar">
                     <input type="text" placeholder="Search">
                     <ul>
@@ -169,24 +168,23 @@
             </ul>
         </nav>
     </header>
-    <section class="main-content">
-        <form method="post" action="{% url 'recommendation_page' %}">
+<section class="main-content">
+        <form method="post" action="{% url 'webtoon_recommendation_page' %}">
             {% csrf_token %}
-            {{ form }}
+            <label for="webtoon">Enter a Webtoon Title:</label>
+            <input type="text" id="webtoon" name="webtoon" placeholder="Enter webtoon title">
             <input type="submit" value="Get Recommendations">
         </form>
 
-        {% if input_character %}
-            <p>Top 10 characters similar to {{ input_character }}:</p>
+        {% if input_webtoon %}
+            <p>Top 10 webtoons similar to "{{ input_webtoon }}":</p>
             <div class="grid-container">
-                {% for character, image_url in similar_characters_cosine %}
+                {% for webtoon in similar_webtoons %}
                     <div class="grid-item">
-                        <img src="{{ image_url }}" alt="{{ character }}">
-                        <p>{{ character }}</p>
+                        <p>{{ webtoon }}</p>
                     </div>
                 {% endfor %}
             </div>
         {% endif %}
     </section>
 </body>
-</html>

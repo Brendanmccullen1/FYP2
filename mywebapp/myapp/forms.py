@@ -3,3 +3,6 @@ from django import forms
 
 class CharacterInputForm(forms.Form):
     character = forms.CharField(label='Enter a character', max_length=100)
+
+class WebtoonInputForm(forms.Form):
+    webtoon = forms.CharField(label='Enter a webtoon', max_length=100)
