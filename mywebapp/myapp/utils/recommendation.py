@@ -140,29 +140,24 @@ def get_marvel_fandom_image(character, base_url="https://marvel.fandom.com/wiki/
         print(f"Failed to fetch Marvel Fandom page for {character}. Status code: {e_marvel_fandom.response.status_code}")
         return None
 
-def get_webtoon_fandom_image(webtoon_title, base_url="https://webtoon.fandom.com/wiki/"):
+def get_webtoon_image(webtoon_title, base_url="https://webtoon.fandom.com/wiki/"):
     try:
-        # Search on Webtoon Fandom
         query = webtoon_title.replace(" ", "_")
         search_url = f"{base_url}{query}"
         response = requests.get(search_url)
         response.raise_for_status()
 
         soup = BeautifulSoup(response.content, 'html.parser')
-        infobox = soup.find('aside', {'class': 'portable-infobox pi-background pi-europa pi-theme-wikia pi-layout-default pi-item-spacing pi-border-color'})
+        image_element = soup.find('img', {'class': 'pi-image-thumbnail'})
+        if image_element:
+            image_url = image_element.get('src')
 
-        if infobox:
-            image_element = infobox.find('img', {'class': 'pi-image-thumbnail'})
-            if image_element:
-                image_url = image_element.get('src')
-                return image_url
-            else:
-                print(f"No image found in the infobox for {webtoon_title} on Webtoon Fandom")
-                return None
-        else:
-            print(f"No infobox found for {webtoon_title} on Webtoon Fandom")
-            return None
+            return image_url
+
+        print(f"No image found for {webtoon_title} on Webtoon Fandom")
+        return None
 
     except requests.HTTPError as e_webtoon_fandom:
-        print(f"Failed to fetch Webtoon Fandom page for {webtoon_title}. Status code: {e_webtoon_fandom.response.status_code}")
+        print(
+            f"Failed to fetch Webtoon Fandom page for {webtoon_title}. Status code: {e_webtoon_fandom.response.status_code}")
         return None

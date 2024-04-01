@@ -9,10 +9,12 @@ from .forms import CharacterInputForm, WebtoonInputForm
 from .models import ComicBookStore
 from .utils.Machine_Learning1 import find_similar_webtoons, cosine_sim_matrix, df_webtoon
 from .utils.recommendation import find_similar_characters_cosine, get_wikipedia_image, get_dc_fandom_image, \
-    get_marvel_fandom_image
+    get_marvel_fandom_image, get_webtoon_image
 from .utils.Machine_Learning1 import find_similar_webtoons
 from .utils.stores import get_nearby_stores as utils_get_nearby_stores, get_nearby_stores
 from .utils.recommendation import find_similar_characters_cosine
+from .utils.testing import get_webtoon_image
+
 
 def home(request):
     return render(request, 'home.html')
@@ -96,9 +98,30 @@ def stores_near_me(request):
     return render(request, 'stores_near_me.html')
 
 def recommendations(request):
-    if request.method == 'GET' and 'webtoon' in request.GET:
-        input_webtoon = request.GET.get('webtoon')
-        similar_webtoons = find_similar_webtoons(input_webtoon, df_webtoon, cosine_sim_matrix)
-        return render(request, 'webtoon_recommendation_page.html', {'input_webtoon': input_webtoon, 'similar_webtoons': similar_webtoons})
+    input_webtoon = ''
+    similar_webtoons = []
+    webtoon_images = {}
+
+    if request.method == 'POST':
+        form = WebtoonInputForm(request.POST)
+        if form.is_valid():
+            input_webtoon = form.cleaned_data['webtoon'].strip()
+            similar_webtoons = find_similar_webtoons(input_webtoon, df_webtoon, cosine_sim_matrix)
+
+            # Generate image URLs for the similar webtoons
+            for webtoon in similar_webtoons:
+                image_url = get_webtoon_image(webtoon)
+                print(f"Image URL for {webtoon}: {image_url}")  # Print for debugging
+                webtoon_images[webtoon] = image_url
+
     else:
-        return render(request, 'webtoon_recommendation_page.html')
+        form = WebtoonInputForm()
+
+    context = {
+        'form': form,
+        'input_webtoon': input_webtoon,
+        'similar_webtoons': similar_webtoons,
+        'webtoon_images': webtoon_images,
+    }
+
+    return render(request, 'webtoon_recommendation_page.html', context)
