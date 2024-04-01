@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Webtoon Recommendations</title>
-    <style>
+  <style>
         /* Reset default browser styles */
         * {
             margin: 0;
@@ -168,23 +168,21 @@
             </ul>
         </nav>
     </header>
-<section class="main-content">
-        <form method="post" action="{% url 'webtoon_recommendation_page' %}">
-            {% csrf_token %}
-            <label for="webtoon">Enter a Webtoon Title:</label>
-            <input type="text" id="webtoon" name="webtoon" placeholder="Enter webtoon title">
-            <input type="submit" value="Get Recommendations">
-        </form>
+    <section class="main-content">
+    <form method="get" action="{% url 'webtoon_recommendation_page' %}">
+        {% csrf_token %}
+        <label for="webtoon">Enter a Webtoon Title:</label>
+        <input type="text" id="webtoon" name="webtoon" placeholder="Enter webtoon title">
+        <input type="submit" value="Get Recommendations">
+    </form>
 
-        {% if input_webtoon %}
-            <p>Top 10 webtoons similar to "{{ input_webtoon }}":</p>
-            <div class="grid-container">
-                {% for webtoon in similar_webtoons %}
-                    <div class="grid-item">
-                        <p>{{ webtoon }}</p>
-                    </div>
-                {% endfor %}
-            </div>
-        {% endif %}
-    </section>
+    {% if input_webtoon %}
+        <h2>Top 10 Webtoons Similar to "{{ input_webtoon }}"</h2>
+        <ul>
+            {% for webtoon in similar_webtoons %}
+                <li>{{ webtoon }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
 </body>
+</html>

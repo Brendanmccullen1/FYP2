@@ -64,7 +64,3 @@ def find_similar_webtoons(input_name, df, cosine_sim_matrix, top_n=9):
     similar_webtoons = df.iloc[comic_indices]['Name'].tolist()
 
     return similar_webtoons
-
-# Example: Get similar webtoons to a given webtoon title
-similar_webtoons = find_similar_webtoons('The Nuna at Our Office', df_webtoon, cosine_sim_matrix)
-print(similar_webtoons)
