@@ -151,7 +151,7 @@ def get_webtoon_image(webtoon_title, base_url="https://webtoon.fandom.com/wiki/"
         image_element = soup.find('img', {'class': 'pi-image-thumbnail'})
         if image_element:
             image_url = image_element.get('src')
-
+            print(f" image found for {webtoon_title} on Webtoon Fandom")
             return image_url
 
         print(f"No image found for {webtoon_title} on Webtoon Fandom")

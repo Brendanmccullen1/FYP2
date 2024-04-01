@@ -111,7 +111,6 @@ def recommendations(request):
             # Generate image URLs for the similar webtoons
             for webtoon in similar_webtoons:
                 image_url = get_webtoon_image(webtoon)
-                print(f"Image URL for {webtoon}: {image_url}")  # Print for debugging
                 webtoon_images[webtoon] = image_url
 
     else:
