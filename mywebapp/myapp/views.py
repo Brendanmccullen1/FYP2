@@ -42,25 +42,25 @@ def recommendation_page(request):
         form = CharacterInputForm(request.POST)
         if form.is_valid():
             input_character = form.cleaned_data['character'].strip()
-            df = pd.read_csv('myapp/datasets/superheroes_power_matrix.csv')
+            df = pd.read_csv('myapp/datasets/superheroes_power_matrix_filtered.csv')
+
+            # Filter characters based on those available in the cleaned character-image mapping CSV
+            character_image_df = pd.read_csv('myapp/datasets/character_image_mapping_cleaned.csv')
+            available_characters = character_image_df['Character'].tolist()
+            df = df[df['Name'].isin(available_characters)]
+
             similar_characters_cosine = find_similar_characters_cosine(input_character, df)
 
-            # Generate image URLs for the similar characters
+            # Fetch image URLs for similar characters
             image_urls = []
             for character in similar_characters_cosine:
-                # Get image URL from Wikipedia
-                image_url = get_marvel_fandom_image(character)
-                if not image_url:
-                    # If image not found on Wikipedia, try DC Fandom
-                    image_url = get_dc_fandom_image(character)
-                    if not image_url:
-                        # If image not found on DC Fandom, try Marvel Fandom
-                        image_url = get_wikipedia_image(character)
-                        if not image_url:
-                            # If image not found on any website, set a placeholder image
-                            image_url = 'https://via.placeholder.com/150'  # Placeholder image URL
-                            # Alternatively, you can display a message indicating that the image could not be found
-                            # image_url = None  # Set image_url to None if you want to display a message in the template
+                # Fetch image URL from cleaned character-image mapping CSV
+                image_url_row = character_image_df[character_image_df['Character'] == character]
+                if not image_url_row.empty:
+                    image_url = image_url_row.iloc[0]['Image_URL']
+                else:
+                    # If image URL not found, set a placeholder image
+                    image_url = 'https://via.placeholder.com/150'  # Placeholder image URL
                 image_urls.append(image_url)
 
             # Prepare context for rendering
@@ -81,7 +81,6 @@ def recommendation_page(request):
     }
 
     return render(request, 'recommendation_page.html', context)
-
 
 
 
