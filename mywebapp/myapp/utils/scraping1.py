@@ -1,5 +1,6 @@
 import pandas as pd
-from mywebapp.myapp.utils.recommendation import get_webtoon_image, get_dc_fandom_image, get_marvel_fandom_image
+from mywebapp.myapp.utils.recommendation import get_webtoon_image, get_dc_fandom_image, get_marvel_fandom_image, \
+    get_wikipedia_image, get_superhero_image
 
 
 def create_character_image_mapping(df):
@@ -13,13 +14,14 @@ def create_character_image_mapping(df):
 
 def get_image_url(character):
     # Try different sources to find the image URL
-    image_url = get_marvel_fandom_image(character)
+
+    image_url = get_superhero_image(character)
+    if not image_url:
+        image_url = get_marvel_fandom_image(character)
     if not image_url:
         image_url = get_dc_fandom_image(character)
     if not image_url:
-        image_url = get_wikepedia_image(character)
-    if not image_url:
-        image_url = get_webtoon_image(character)
+        image_url = get_wikipedia_image(character)
 
     return image_url
 

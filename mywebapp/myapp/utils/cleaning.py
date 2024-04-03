@@ -1,13 +1,13 @@
-# import pandas as pd
-#
-# # Read the CSV file into a DataFrame
-# df = pd.read_csv('../datasets/character_image_mapping.csv')
-#
-# # Drop rows where Image_URL is NaN
-# df_cleaned = df.dropna(subset=['Image_URL'])
-#
-# # Save the cleaned DataFrame back to a CSV file
-# df_cleaned.to_csv('character_image_mapping_cleaned.csv', index=False)
+import pandas as pd
+
+# Read the CSV file into a DataFrame
+df = pd.read_csv('../datasets/character_image_mapping.csv')
+
+# Drop rows where Image_URL is NaN
+df_cleaned = df.dropna(subset=['Image_URL'])
+
+# Save the cleaned DataFrame back to a CSV file
+df_cleaned.to_csv('character_image_mapping_cleaned.csv', index=False)
 
 import pandas as pd
 
