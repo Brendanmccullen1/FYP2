@@ -175,16 +175,22 @@
         <input type="submit" value="Get Recommendations">
     </form>
 
-    {% if input_webtoon %}
-        <h2>Top 10 Webtoons Similar to "{{ input_webtoon }}"</h2>
-        <div class="grid-container">
-            {% for webtoon, image_url in webtoon_images.items %}
-                <div class="grid-item">
-                    <img src="{{ image_url }}" alt="{{ webtoon }}">
-                    <p>{{ webtoon }}</p>
-                </div>
-            {% endfor %}
-        </div>
-    {% endif %}
-</section>
+ {% if input_webtoon %}
+            <h2>Top 10 Webtoons Similar to "{{ input_webtoon }}"</h2>
+            <div class="grid-container">
+                {% for webtoon, image_url in webtoon_images.items %}
+                    <div class="grid-item">
+                        <a href="{% url 'webtoon_profile' webtoon_name=webtoon %}">
+                            <img src="{{ image_url }}" alt="{{ webtoon }}">
+                        </a>
+                        <p>{{ webtoon }}</p>
+                    </div>
+                    {% if forloop.counter|divisibleby:3 and not forloop.last %}
+                        </div><div class="grid-container">
+                    {% endif %}
+                {% endfor %}
+            </div>
+        {% endif %}
+    </section>
 </body>
+</html>

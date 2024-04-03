@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ name }} Profile</title>
+    <style>
+        /* Reset default browser styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+            font-family: 'Knewave', cursive;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .banner {
+            background-color: #007bff; /* Comic book blue */
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+            width: 100%;
+        }
+
+        .banner h1 {
+            font-size: 36px;
+            margin-bottom: 10px;
+        }
+
+        nav ul {
+            list-style-type: none;
+            display: flex;
+            align-items: center;
+        }
+
+        nav ul li {
+            margin-right: 20px;
+        }
+
+        nav ul li a {
+            color: #fff;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        nav ul li a:hover {
+            color: #f0f0f0;
+        }
+
+        .container {
+            max-width: 800px;
+            width: 100%;
+            padding: 20px;
+        }
+
+        .profile {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+        }
+
+        .profile h1 {
+            font-size: 24px;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        table {
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        table th {
+            text-align: left;
+            padding: 10px 0;
+            width: 30%;
+        }
+
+        table td {
+            padding: 10px 0;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin-top: 10px;
+        }
+
+        h2 {
+            margin-top: 20px;
+            font-size: 20px;
+        }
+
+        p {
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+
+<header class="banner">
+    <h1>Find Your Best Comic Book</h1>
+    <nav>
+        <ul>
+            <li><a href="{% url 'home' %}">Home</a></li>
+            <li><a href="{% url 'webtoon_recommendation_page' %}">Webtoons</a></li>
+            <li><a href="{% url 'contact_us' %}">Contact Us</a></li>
+            <li><a href="{% url 'stores_near_you' %}">Stores Near You</a></li>
+            <li><a href="{% url 'recommendation_page' %}">Character Recommendation</a></li>
+            <!-- Add more relevant links here -->
+        </ul>
+    </nav>
+</header>
+
+<div class="container">
+    <div class="profile">
+        <h1>{{ name }} Profile</h1>
+
+        <table>
+            <tr>
+                <th>Name</th>
+                <td>{{ name }}</td>
+            </tr>
+            <tr>
+                <th>Creator</th>
+                <td>{{ creator }}</td>
+            </tr>
+            <tr>
+                <th>Rating</th>
+                <td>{{ rating }}</td>
+            </tr>
+            <tr>
+                <th>English Link</th>
+                <td><a href="{{ english_link }}" target="_blank">{{ english_link }}</a></td>
+            </tr>
+            <tr>
+                <th>English Release Date</th>
+                <td>{{ english_release_date }}</td>
+            </tr>
+            <tr>
+                <th>Status</th>
+                <td>{{ status }}</td>
+            </tr>
+            <tr>
+                <th>Image</th>
+                <td><img src="{{ image_url }}" alt="{{ name }}"></td>
+            </tr>
+        </table>
+
+        <h2>Summary</h2>
+        <p>{{ summary }}</p>
+    </div>
+</div>
+
+</body>
+</html>

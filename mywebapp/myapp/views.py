@@ -1,9 +1,9 @@
 # myapp/views.py
 import re
-
+from .models import Webtoon
 import numpy as np
 from django.contrib.sites import requests
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 import pandas as pd
 from .forms import CharacterInputForm, WebtoonInputForm
 from .models import ComicBookStore
@@ -123,3 +123,43 @@ def recommendations(request):
     }
 
     return render(request, 'webtoon_recommendation_page.html', context)
+
+
+def webtoon_profile(request, webtoon_name):
+    # Read the CSV files
+    webtoon_info_df = pd.read_csv('myapp/datasets/webtoon_info.csv')
+    webtoon_dataset_df = pd.read_csv('myapp/datasets/Webtoon Dataset.csv')
+
+    # Filter the data based on the webtoon_name
+    webtoon_info = webtoon_info_df[webtoon_info_df['Name'] == webtoon_name]
+    webtoon_dataset = webtoon_dataset_df[webtoon_dataset_df['Name'] == webtoon_name]
+
+    # Check if the webtoon exists
+    if webtoon_info.empty or webtoon_dataset.empty:
+        return render(request, 'webtoon_not_found.html', {'webtoon_name': webtoon_name})
+
+    # Extract values from DataFrame
+    name = webtoon_info['Name'].iloc[0]
+    creator = webtoon_info['Creator'].iloc[0]
+    rating = webtoon_info['Rating'].iloc[0]
+    english_link = webtoon_info['English_Link'].iloc[0]
+    english_release_date = webtoon_info['English_Release_Date'].iloc[0]
+    status = webtoon_info['Status'].iloc[0]
+    image_url = webtoon_info['Image_URL'].iloc[0]
+
+    # Assuming 'summary' is a field in the Webtoon model, you can access it like this:
+    summary = webtoon_dataset['Summary'].iloc[0]  # Adjust this based on your actual field name
+
+    context = {
+        'name': name,
+        'creator': creator,
+        'rating': rating,
+        'english_link': english_link,
+        'english_release_date': english_release_date,
+        'status': status,
+        'image_url': image_url,
+        'summary': summary,
+        # Add other context data as needed
+    }
+
+    return render(request, 'webtoon_profile.html', context)

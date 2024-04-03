@@ -1,6 +1,6 @@
 # myapp/urls.py
 from django.urls import path
-from .views import home, recommendations, contact_us, stores_near_you, recommendation_page
+from .views import home, recommendations, contact_us, stores_near_you, recommendation_page, webtoon_profile
 
 urlpatterns = [
     path('', home, name='home'),
@@ -8,4 +8,6 @@ urlpatterns = [
     path('contact_us/', contact_us, name='contact_us'),
     path('stores_near_you/', stores_near_you, name='stores_near_you'),
     path('recommendation/', recommendation_page, name='recommendation_page'),
+    path('webtoon/<str:webtoon_name>/', webtoon_profile, name='webtoon_profile'),
+
 ]

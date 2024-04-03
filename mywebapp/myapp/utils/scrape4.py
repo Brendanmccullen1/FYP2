@@ -125,5 +125,5 @@ with open(webtoon_data_file, 'r', encoding='utf-8') as csv_file:
 
 # Scrape information for each webtoon and save to CSV
 webtoon_data = scrape_webtoons_info(webtoon_names)
-output_file = 'webtoon_info.csv'
+output_file = '../datasets/webtoon_info.csv'
 save_to_csv(webtoon_data, output_file)
