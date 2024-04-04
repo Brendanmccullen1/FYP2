@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <title>Manga Recommendations</title>
     <style>
         /* Reset default browser styles */
         * {
@@ -105,78 +104,83 @@
             display: block;
         }
 
-        .comic-covers {
-            display: flex;
-            justify-content: space-between;
-            padding: 20px;
+        .main-content {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            text-align: center;
         }
 
-        .comic-cover img {
+        .main-content h2 {
+            font-size: 32px;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .main-content p {
+            font-size: 18px;
+            line-height: 1.6;
+            color: #666;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .grid-item {
+            text-align: center;
+        }
+
+        .grid-item img {
             max-width: 200px;
             border-radius: 10px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             transition: transform 0.3s ease;
         }
 
-        .comic-cover img:hover {
+        .grid-item img:hover {
             transform: scale(1.05);
         }
 
-        .text-content {
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 40px 20px;
-            text-align: center;
-        }
-
-        .text-content h2 {
-            font-size: 32px;
-            margin-bottom: 20px;
-            color: #333;
-        }
-
-        .text-content p {
-            font-size: 18px;
-            line-height: 1.6;
-            color: #666;
+        .grid-item p {
+            margin-top: 10px;
         }
     </style>
 </head>
 <body>
     <header class="banner">
-        <h1>Find Your Best Comic Book</h1>
+        <h1>Find Your Best Manga</h1>
         <nav>
             <ul>
                 <li><a href="{% url 'home' %}">Home</a></li>
-                <li><a href="{% url 'webtoon_recommendation_page' %}">webtoons</a></li>
+                <li><a href="{% url 'webtoon_recommendation_page' %}">Webtoons</a></li>
                 <li><a href="{% url 'contact_us' %}">Contact Us</a></li>
                 <li><a href="{% url 'stores_near_you' %}">Stores Near You</a></li>
-                <li><a href="{% url 'recommendation_page' %}">Character Recommendation</a></li>
-                <li><a href="{% url 'manga_recommendations' %}">Manga</a></li>
-                    <input type="text" placeholder="Search">
-                    <ul>
-                        <!-- Your search results will go here -->
-                    </ul>
-                </li>
             </ul>
         </nav>
     </header>
-    <section class="main-content">
-        <div class="text-content">
-            <h2>Discover the World of Comics</h2>
-            <p>Welcome to our comic book and character recommendation website! Dive into the thrilling world of comics with us and discover a universe filled with captivating stories, iconic characters, and breathtaking artwork. Whether you're a seasoned comic enthusiast or just starting your journey, our site offers curated recommendations to suit every taste. Explore our vast collection of comics, find hidden gems, and uncover new favorites. Plus, our character recommendation feature helps you discover heroes and villains tailored to your preferences. Join us as we embark on an epic adventure through the pages of comic history. Start exploring today and unleash your inner superhero!</p>
+ <section class="main-content">
+ <section class="main-content">
+    <form method="post">
+        {% csrf_token %}
+        {{ form }}
+        <input type="submit" value="Get Recommendations">
+    </form>
+
+    {% if recommendations %}
+        <p>Top 9 manga similar to {{ input_manga }}:</p>
+        <div class="grid-container">
+            {% for manga in recommendations %}
+                <div class="grid-item">
+                    <img src="{{ manga.image_url }}" alt="{{ manga.title }}">
+                    <p>{{ manga.title }}</p>
+                </div>
+            {% endfor %}
         </div>
-        <div class="comic-covers">
-            <div class="comic-cover">
-                <img src="https://upload.wikimedia.org/wikipedia/en/0/08/Secretwars1.png" alt="Comic Book 1">
-            </div>
-            <div class="comic-cover">
-                <img src="https://upload.wikimedia.org/wikipedia/en/a/a9/Cover_of_Superman_Comic_1st_Edition_-_Summer_1939.jpg" alt="Comic Book 2">
-            </div>
-            <div class="comic-cover">
-                <img src="https://upload.wikimedia.org/wikipedia/en/6/6d/Wolverine_%28vol._1%29_1.jpg" alt="Comic Book 3">
-            </div>
-        </div>
-    </section>
+    {% endif %}
+</section>
 </body>
 </html>

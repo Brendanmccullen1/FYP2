@@ -1,20 +1,13 @@
-# myapp/views.py
-import re
-from .models import Webtoon
-import numpy as np
-from django.contrib.sites import requests
-from django.shortcuts import render, redirect, get_object_or_404
+import os
 import pandas as pd
-from .forms import CharacterInputForm, WebtoonInputForm
-from .models import ComicBookStore
+from django.shortcuts import render
+from .forms import CharacterInputForm, WebtoonInputForm, MangaInputForm
+from .utils.recommendation import find_similar_characters_cosine, get_webtoon_image
 from .utils.Machine_Learning1 import find_similar_webtoons, cosine_sim_matrix, df_webtoon
-from .utils.recommendation import find_similar_characters_cosine, get_wikipedia_image, get_dc_fandom_image, \
-    get_marvel_fandom_image, get_webtoon_image
-from .utils.Machine_Learning1 import find_similar_webtoons
-from .utils.stores import get_nearby_stores as utils_get_nearby_stores, get_nearby_stores
-from .utils.recommendation import find_similar_characters_cosine
-from .utils.testing import get_webtoon_image
+from .utils.manga_recommendation import get_manga_recommendations
 
+# Consolidate imports for better readability
+from .utils.stores import get_nearby_stores
 
 def home(request):
     return render(request, 'home.html')
@@ -27,12 +20,6 @@ def contact_us(request):
 
 def stores_near_you(request):
     return render(request, 'stores_near_you.html')
-
-from django.shortcuts import render, redirect
-import pandas as pd
-from .forms import CharacterInputForm
-from .utils.recommendation import find_similar_characters_cosine
-
 
 def recommendation_page(request):
     input_character = ''
@@ -82,17 +69,6 @@ def recommendation_page(request):
 
     return render(request, 'recommendation_page.html', context)
 
-
-
-def calculate_distance(lat1, lon1, lat2, lon2):
-    # Implement a function to calculate the distance between two sets of coordinates
-    # You can use haversine formula or another distance calculation method
-    # For simplicity, let's assume a flat Earth for this example
-    return ((lat2 - lat1) ** 2 + (lon2 - lon1) ** 2) ** 0.5
-
-
-from django.shortcuts import render
-
 def stores_near_me(request):
     return render(request, 'stores_near_me.html')
 
@@ -123,7 +99,6 @@ def recommendations(request):
     }
 
     return render(request, 'webtoon_recommendation_page.html', context)
-
 
 def webtoon_profile(request, webtoon_name):
     # Read the CSV files
@@ -163,3 +138,24 @@ def webtoon_profile(request, webtoon_name):
     }
 
     return render(request, 'webtoon_profile.html', context)
+
+def manga_recommendation_page(request):
+    input_manga = ''
+    recommendations = []
+
+
+    if request.method == 'POST':
+        form = MangaInputForm(request.POST)
+        if form.is_valid():
+            input_manga = form.cleaned_data['manga'].strip()
+            recommendations = get_manga_recommendations(input_manga)
+    else:
+        form = MangaInputForm()
+
+    context = {
+        'form': form,
+        'input_manga': input_manga,
+        'recommendations': recommendations,
+    }
+
+    return render(request, 'manga_recommendation_page.html', context)

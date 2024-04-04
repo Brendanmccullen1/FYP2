@@ -6,3 +6,6 @@ class CharacterInputForm(forms.Form):
 
 class WebtoonInputForm(forms.Form):
     webtoon = forms.CharField(label='Enter a webtoon', max_length=100)
+
+class MangaInputForm(forms.Form):
+    manga = forms.CharField(label='Enter Manga Title', max_length=100)
