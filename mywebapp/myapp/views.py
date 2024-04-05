@@ -32,9 +32,7 @@ def recommendation_page(request):
             df = pd.read_csv('myapp/datasets/merged_character_info.csv')
 
             # Filter characters based on those available in the cleaned character-image mapping CSV
-            character_image_df = pd.read_csv('myapp/datasets/character_image_mapping_cleaned.csv')
-            available_characters = character_image_df['Character'].tolist()
-            df = df[df['Name'].isin(available_characters)]
+            character_image_df = pd.read_csv('myapp/datasets/cleaned_character_info.csv')
 
             similar_characters_cosine = find_similar_characters_cosine(input_character, df)
 
@@ -42,7 +40,7 @@ def recommendation_page(request):
             image_urls = []
             for character in similar_characters_cosine:
                 # Fetch image URL from cleaned character-image mapping CSV
-                image_url_row = character_image_df[character_image_df['Character'] == character]
+                image_url_row = character_image_df[character_image_df['Name'] == character]
                 if not image_url_row.empty:
                     image_url = image_url_row.iloc[0]['Image_URL']
                 else:
@@ -194,3 +192,40 @@ def manga_profile(request, manga_title):
     }
 
     return render(request, 'manga_profile.html', context)
+
+def character_profile(request, character_name):
+    # Read the CSV file containing character information
+    character_info_df = pd.read_csv('myapp/datasets/cleaned_character_info.csv')
+
+    # Filter the character information based on the provided character name
+    character_info = character_info_df[character_info_df['Name'] == character_name]
+
+    # Check if character information exists
+    if character_info.empty:
+        return render(request, 'character_not_found.html', {'character_name': character_name})
+
+    # Extract character details from DataFrame
+    name = character_info['Name'].iloc[0]
+    image_url = character_info['Image_URL'].iloc[0]
+    real_name = character_info['Real name'].iloc[0]
+    first_appearance = character_info['First Appearance'].iloc[0]
+    creators = character_info['Creators'].iloc[0]
+    team_affiliations = character_info['Team Affiliations'].iloc[0]
+    aliases = character_info['Aliases'].iloc[0]
+    base_of_operations = character_info['Base of Operations'].iloc[0]
+    # Add more details extraction if needed
+
+    # Prepare context dictionary with character details
+    context = {
+        'name': name,
+        'image_url': image_url,
+        'real_name': real_name,
+        'first_appearance': first_appearance,
+        'creators': creators,
+        'team_affiliations': team_affiliations,
+        'aliases': aliases,
+        'base_of_operations': base_of_operations,
+        # Add more details to the context if needed
+    }
+
+    return render(request, 'character_profile.html', context)

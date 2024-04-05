@@ -12,13 +12,16 @@
 import pandas as pd
 
 # Load character_info.csv
-character_info_df = pd.read_csv("character_info.csv")
+character_info_df = pd.read_csv("../datasets/cleaned_character_info.csv")
 
-# Load superheroes_power_matrix.csv
-superheroes_power_matrix_df = pd.read_csv("../datasets/superheroes_power_matrix.csv")
+# Load merged_character_info.csv
+merged_df = pd.read_csv("../datasets/merged_character_info.csv")
 
-# Perform an inner merge on the "Name" column
-merged_df = pd.merge(superheroes_power_matrix_df, character_info_df[['Name']], on='Name', how='inner')
+# Identify characters present in merged_df but not in character_info_df
+characters_to_remove = merged_df[~merged_df['Name'].isin(character_info_df['Name'])]['Name']
 
-# Save the result to a new CSV file
-merged_df.to_csv("merged_character_info.csv", index=False)
+# Filter out these characters from merged_df
+filtered_df = merged_df[~merged_df['Name'].isin(characters_to_remove)]
+
+# Save the filtered DataFrame to a new CSV file
+filtered_df.to_csv("filtered_character_info.csv", index=False)

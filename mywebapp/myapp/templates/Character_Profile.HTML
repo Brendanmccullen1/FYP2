@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ Name }} Profile</title>
+    <style>
+        /* Reset default browser styles */
+/* Reset default browser styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Comic Sans MS', cursive, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #000;
+    color: #fff;
+}
+
+.sidebar {
+    background-color: #000;
+    width: 200px;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    padding: 20px;
+    transition: width 0.3s ease;
+    z-index: 1000;
+}
+
+.sidebar:hover {
+    width: 250px;
+}
+
+.banner {
+    padding: 20px;
+    text-align: center;
+    cursor: pointer;
+    background-color: #000;
+    transition: background-color 0.3s ease;
+    z-index: 1;
+    position: relative;
+}
+
+.banner:hover {
+    background-color: #007bff;
+}
+
+.banner h1 {
+    font-size: 24px;
+    margin-bottom: 10px;
+    font-family: 'Impact', sans-serif;
+    color: #fff;
+}
+
+nav ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+nav ul li {
+    margin-bottom: 10px;
+}
+
+nav ul li a {
+    color: #fff;
+    text-decoration: none;
+    font-family: 'Comic Sans MS', cursive, sans-serif;
+    font-size: 18px;
+    display: block;
+    padding: 10px;
+    border: 2px solid transparent;
+    transition: background-color 0.3s ease;
+}
+
+nav ul li a:hover {
+    background-color: #007bff;
+}
+
+.main-content {
+    margin-left: 220px;
+    padding: 40px 20px;
+    display: flex;
+    justify-content: center;
+}
+
+.profile {
+    background-color: #000;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+    width: 600px; /* Fixed width for the profile */
+    outline: 2px solid #fff;
+}
+
+.profile h1 {
+    font-size: 24px;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+table {
+    width: 100%;
+    margin-top: 20px;
+}
+
+table th {
+    text-align: left;
+    padding: 10px 0;
+    width: 30%;
+}
+
+table td {
+    padding: 10px 0;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin-top: 10px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+
+    </style>
+</head>
+<body>
+
+    <div class="sidebar">
+        <div class="banner">
+            <h1>CBRAI</h1>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="{% url 'home' %}">Home</a></li>
+                <li><a href="{% url 'webtoon_recommendation_page' %}">Webtoons</a></li>
+                <li><a href="{% url 'contact_us' %}">Contact Us</a></li>
+                <li><a href="{% url 'stores_near_you' %}">Stores Near You</a></li>
+                <li><a href="{% url 'recommendation_page' %}">Character Recommendation</a></li>
+                <li><a href="{% url 'manga_recommendations' %}">Manga</a></li>
+            </ul>
+        </nav>
+    </div>
+<div class="main-content">
+<div class="container">
+<div class="main-content">
+    <div class="profile">
+        <h1>{{ name }} Profile</h1>
+
+        <table>
+            <tr>
+                <th>Image</th>
+                <td><img src="{{ image_url }}" alt="{{ name }}"></td>
+            </tr>
+            <tr>
+                <th>Name</th>
+                <td>{{ name }}</td>
+            </tr>
+            <tr>
+                <th>Real Name</th>
+                <td>{{ real_name }}</td>
+            </tr>
+            <tr>
+                <th>First Appearance</th>
+                <td>{{ first_appearance }}</td>
+            </tr>
+            <tr>
+                <th>Creators</th>
+                <td>{{ creators }}</td>
+            </tr>
+            <tr>
+                <th>Team Affiliations</th>
+                <td>{{ team_affiliations }}</td>
+            </tr>
+            <tr>
+                <th>Aliases</th>
+                <td>{{ aliases }}</td>
+            </tr>
+            <tr>
+                <th>Base of Operations</th>
+                <td>{{ base_of_operations }}</td>
+            </tr>
+            <!-- Add more profile details here -->
+        </table>
+
+    </div>
+</div>
+</div>
+</div>
+</body>
+</html>

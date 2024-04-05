@@ -156,7 +156,9 @@
         <div class="grid-container">
             {% for character, image_url in similar_characters_cosine %}
                 <div class="grid-item">
+                    <a href="{% url 'character_profile' character_name=character%}">
                     <img src="{{ image_url }}" alt="{{ character }}">
+                        </a>
                     <p>{{ character }}</p>
                 </div>
             {% endfor %}

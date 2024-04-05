@@ -20,7 +20,7 @@ def kmeans(x, n_clusters, random_state=42):
     labels = kmeans_model.fit_predict(x)
     return labels
 
-def find_similar_characters_cosine(input_name, df, top_n=10, n_clusters=9, weights=None):
+def find_similar_characters_cosine(input_name, df, top_n=9, n_clusters=9, weights=None):
     if df.empty:
         return f"The DataFrame is empty. Please make sure your CSV file contains data."
 
@@ -46,13 +46,20 @@ def find_similar_characters_cosine(input_name, df, top_n=10, n_clusters=9, weigh
 
     # Select only the binary attributes for similarity calculation
     binary_attributes = df.drop(['Name'], axis=1)
-    binary_attributes = binary_attributes.apply(lambda x: x * weights[x.name] if x.name in weights else x)
+    binary_attributes = binary_attributes.apply(lambda x: x * weights.get(x.name, 1))  # Use 1 as default weight if not specified
 
     # Calculate cosine similarity matrix for binary attributes
-    cosine_similarity_matrix_result = calculate_cosine_similarity_matrix(binary_attributes.values)
+    try:
+        cosine_similarity_matrix_result = calculate_cosine_similarity_matrix(binary_attributes.values)
+    except ValueError as e:
+        return f"Error occurred during cosine similarity calculation: {e}"
 
     # Perform clustering
-    cluster_labels = kmeans(binary_attributes.values, n_clusters)
+    try:
+        cluster_labels = kmeans(binary_attributes.values, n_clusters)
+    except ValueError as e:
+        return f"Error occurred during clustering: {e}"
+
     df['Cluster'] = cluster_labels
 
     # Get cluster label of input character
@@ -63,8 +70,7 @@ def find_similar_characters_cosine(input_name, df, top_n=10, n_clusters=9, weigh
     similar_characters = similar_characters[similar_characters['Name'] != input_name]
 
     if similar_characters.empty:
-        print(f"No similar characters found for {input_name} within the given clustering.")
-        return []
+        return f"No similar characters found for {input_name} within the given clustering."
 
     # Reset index of similar_characters
     similar_characters.reset_index(drop=True, inplace=True)
@@ -82,6 +88,7 @@ def find_similar_characters_cosine(input_name, df, top_n=10, n_clusters=9, weigh
     most_similar_characters = similar_characters.sort_values(by='Similarity', ascending=False).head(top_n)['Name'].tolist()
 
     return most_similar_characters
+
 
 
 
@@ -214,17 +221,3 @@ def get_superhero_image(character, base_url="https://superheroes.fandom.com/wiki
         print(
             f"Failed to fetch Superheroes Fandom page for {character}. Status code: {e_superhero_fandom.response.status_code}")
         return None
-
-
-
-# Load the DataFrame from the CSV file
-df = pd.read_csv('../datasets/merged_character_info.csv')
-
-# Define the input name
-input_name = "Iron Man"
-
-# Call the function with default weights
-similar_characters = find_similar_characters_cosine(input_name, df)
-
-# Print the most similar characters
-print(similar_characters)
