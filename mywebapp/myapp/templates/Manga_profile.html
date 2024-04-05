@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ title }} Profile</title>
-    <style>
+       <style>
         /* Reset default browser styles */
         * {
             margin: 0;
@@ -13,62 +13,88 @@
         }
 
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Comic Sans MS', cursive, sans-serif; /* Change font to Comic Sans or any comic-style font */
             margin: 0;
             padding: 0;
-            background-color: #f9f9f9;
-            font-family: 'Knewave', cursive;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
+            background-color: #000; /* Black background */
+            color: #fff; /* White text */
+        }
+
+        .sidebar {
+            background-color: #000; /* Black sidebar */
+            width: 200px;
+            height: 100vh; /* Full height sidebar */
+            position: fixed; /* Fixed position */
+            top: 0;
+            left: 0;
+            padding: 20px;
+            transition: width 0.3s ease; /* Smooth transition */
+            z-index: 1000; /* Ensure it's above other content */
+        }
+
+        .sidebar:hover {
+            width: 250px; /* Expand on hover */
         }
 
         .banner {
-            background-color: #007bff; /* Comic book blue */
-            color: #fff;
             padding: 20px;
             text-align: center;
-            width: 100%;
+            cursor: pointer; /* Change cursor on hover */
+            background-color: #000; /* Black background for banner */
+            transition: background-color 0.3s ease; /* Smooth transition */
+            z-index: 1; /* Ensure it's above other content */
+            position: relative; /* Adjust positioning */
+        }
+
+        .banner:hover {
+            background-color: #007bff; /* Blue background on hover */
         }
 
         .banner h1 {
-            font-size: 36px;
+            font-size: 24px;
             margin-bottom: 10px;
+            font-family: 'Impact', sans-serif; /* Change font to Impact or any bold comic-style font */
+            color: #fff; /* White text */
         }
 
         nav ul {
             list-style-type: none;
-            display: flex;
-            align-items: center;
+            padding: 0;
         }
 
         nav ul li {
-            margin-right: 20px;
+            margin-bottom: 10px;
         }
 
         nav ul li a {
             color: #fff;
             text-decoration: none;
-            transition: color 0.3s ease;
+            font-family: 'Comic Sans MS', cursive, sans-serif; /* Change font to Comic Sans or any comic-style font */
+            font-size: 18px;
+            display: block;
+            padding: 10px;
+            border: 2px solid transparent; /* Initially transparent border */
+            transition: background-color 0.3s ease; /* Smooth transition for background color */
         }
 
         nav ul li a:hover {
-            color: #f0f0f0;
+            background-color: #007bff; /* Blue background on hover */
         }
 
-        .container {
-            max-width: 800px;
-            width: 100%;
-            padding: 20px;
+        .main-content {
+            display: flex;
+            justify-content: center; /* Center align horizontally */
+            align-items: center; /* Center align vertically */
+            height: 100vh; /* Full height */
         }
 
         .profile {
-            background-color: #fff;
+            background-color: #000;
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            margin-top: 20px;
+            outline: 2px solid #fff; /* White outline */
+            width: calc(33.33% - 40px); /* Roughly one-third of page width with margins */
         }
 
         .profile h1 {
@@ -96,36 +122,30 @@
             max-width: 100%;
             height: auto;
             display: block;
-            margin-top: 10px;
+            margin: 10px auto; /* Center the image horizontally */
         }
 
-        h2 {
-            margin-top: 20px;
-            font-size: 20px;
-        }
-
-        p {
-            line-height: 1.6;
-        }
     </style>
 </head>
 <body>
 
-<header class="banner">
-    <h1>Find Your Best Comic Book</h1>
-    <nav>
-        <ul>
-            <li><a href="{% url 'home' %}">Home</a></li>
-            <li><a href="{% url 'webtoon_recommendation_page' %}">Webtoons</a></li>
-            <li><a href="{% url 'contact_us' %}">Contact Us</a></li>
-            <li><a href="{% url 'stores_near_you' %}">Stores Near You</a></li>
-            <li><a href="{% url 'recommendation_page' %}">Character Recommendation</a></li>
-            <!-- Add more relevant links here -->
-        </ul>
-    </nav>
-</header>
+    <div class="sidebar">
+        <div class="banner">
+            <h1>CBRAI</h1>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="{% url 'home' %}">Home</a></li>
+                <li><a href="{% url 'webtoon_recommendation_page' %}">Webtoons</a></li>
+                <li><a href="{% url 'contact_us' %}">Contact Us</a></li>
+                <li><a href="{% url 'stores_near_you' %}">Stores Near You</a></li>
+                <li><a href="{% url 'recommendation_page' %}">Character Recommendation</a></li>
+                <li><a href="{% url 'manga_recommendations' %}">Manga</a></li>
+            </ul>
+        </nav>
+    </div>
 
-<div class="container">
+<div class="main-content">
     <div class="profile">
         <h1>{{ title }} Profile</h1>
 

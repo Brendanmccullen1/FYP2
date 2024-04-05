@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Manga Recommendations</title>
-    <style>
+<style>
         /* Reset default browser styles */
         * {
             margin: 0;
@@ -13,114 +13,90 @@
         }
 
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Comic Sans MS', cursive, sans-serif; /* Change font to Comic Sans or any comic-style font */
             margin: 0;
             padding: 0;
-            background-color: #f9f9f9;
-            font-family: 'Knewave', cursive;
+            background-color: #000; /* Black background */
+            color: #fff; /* White text */
+        }
+
+        .sidebar {
+            background-color: #000; /* Black sidebar */
+            width: 200px;
+            height: 100vh; /* Full height sidebar */
+            position: fixed; /* Fixed position */
+            top: 0;
+            left: 0;
+            padding: 20px;
+            transition: width 0.3s ease; /* Smooth transition */
+            z-index: 1000; /* Ensure it's above other content */
+        }
+
+        .sidebar:hover {
+            width: 250px; /* Expand on hover */
         }
 
         .banner {
-            background-color: #007bff; /* Comic book blue */
-            color: #fff;
             padding: 20px;
             text-align: center;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            cursor: pointer; /* Change cursor on hover */
+            background-color: #000; /* Black background for banner */
+            transition: background-color 0.3s ease; /* Smooth transition */
+            z-index: 1; /* Ensure it's above other content */
+            position: relative; /* Adjust positioning */
+        }
+
+        .banner:hover {
+            background-color: #007bff; /* Blue background on hover */
         }
 
         .banner h1 {
-            font-size: 36px;
+            font-size: 24px;
             margin-bottom: 10px;
+            font-family: 'Impact', sans-serif; /* Change font to Impact or any bold comic-style font */
+            color: #fff; /* White text */
         }
 
         nav ul {
             list-style-type: none;
-            display: flex;
-            align-items: center;
+            padding: 0;
         }
 
         nav ul li {
-            margin-right: 20px;
+            margin-bottom: 10px;
         }
 
         nav ul li a {
             color: #fff;
             text-decoration: none;
-            transition: color 0.3s ease;
+            font-family: 'Comic Sans MS', cursive, sans-serif; /* Change font to Comic Sans or any comic-style font */
+            font-size: 18px;
+            display: block;
+            padding: 10px;
+            border: 2px solid transparent; /* Initially transparent border */
+            transition: background-color 0.3s ease; /* Smooth transition for background color */
         }
 
         nav ul li a:hover {
-            color: #f0f0f0;
-        }
-
-        .search-bar {
-            position: relative;
-        }
-
-        .search-bar input[type="text"] {
-            padding: 10px 15px;
-            border: 2px solid #ddd;
-            color: #333;
-            font-size: 16px;
-            font-family: 'Knewave', cursive;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            width: 200px;
-            height: 40px;
-            border-radius: 20px;
-            outline: none;
-            transition: border-color 0.3s ease;
-        }
-
-        .search-bar input[type="text"]:focus {
-            border-color: #007bff;
-        }
-
-        .search-bar ul {
-            position: absolute;
-            top: 50px;
-            left: 0;
-            background-color: #fff;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            padding: 10px 0;
-            display: none;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        .search-bar ul li {
-            padding: 10px 15px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        .search-bar ul li:hover {
-            background-color: #f0f0f0;
-        }
-
-        .search-bar input[type="text"]:focus + ul {
-            display: block;
+            background-color: #007bff; /* Blue background on hover */
         }
 
         .main-content {
-            max-width: 800px;
-            margin: 0 auto;
+            margin-left: 260px; /* Adjust for sidebar width and spacing */
             padding: 40px 20px;
-            text-align: center;
         }
 
         .main-content h2 {
             font-size: 32px;
             margin-bottom: 20px;
-            color: #333;
+            color: #fff;
+            font-family: 'Impact', sans-serif; /* Change font to Impact or any bold comic-style font */
         }
 
         .main-content p {
             font-size: 18px;
             line-height: 1.6;
-            color: #666;
+            color: #ccc; /* Light gray text */
         }
 
         .grid-container {
@@ -136,6 +112,7 @@
 
         .grid-item img {
             max-width: 200px;
+            max-height: 250px; /* Set maximum height to maintain aspect ratio */
             border-radius: 10px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             transition: transform 0.3s ease;
@@ -148,20 +125,26 @@
         .grid-item p {
             margin-top: 10px;
         }
+
+
     </style>
 </head>
 <body>
-    <header class="banner">
-        <h1>Find Your Best Manga</h1>
-        <nav>
-            <ul>
-                <li><a href="{% url 'home' %}">Home</a></li>
-                <li><a href="{% url 'webtoon_recommendation_page' %}">Webtoons</a></li>
-                <li><a href="{% url 'contact_us' %}">Contact Us</a></li>
-                <li><a href="{% url 'stores_near_you' %}">Stores Near You</a></li>
-            </ul>
-        </nav>
-    </header>
+<div class="sidebar">
+    <div class="banner">
+        <h1>CBRAI</h1>
+    </div>
+    <nav>
+        <ul>
+            <li><a href="{% url 'home' %}">Home</a></li>
+            <li><a href="{% url 'webtoon_recommendation_page' %}">Webtoons</a></li>
+            <li><a href="{% url 'contact_us' %}">Contact Us</a></li>
+            <li><a href="{% url 'stores_near_you' %}">Stores Near You</a></li>
+            <li><a href="{% url 'recommendation_page' %}">Character Recommendation</a></li>
+            <li><a href="{% url 'manga_recommendations' %}">Manga</a></li>
+        </ul>
+    </nav>
+</div>
     <section class="main-content">
         <form method="post">
             {% csrf_token %}

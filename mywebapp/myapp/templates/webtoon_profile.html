@@ -13,62 +13,89 @@
         }
 
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Comic Sans MS', cursive, sans-serif; /* Change font to Comic Sans or any comic-style font */
             margin: 0;
             padding: 0;
-            background-color: #f9f9f9;
-            font-family: 'Knewave', cursive;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
+            background-color: #000; /* Black background */
+            color: #fff; /* White text */
+        }
+
+        .sidebar {
+            background-color: #000; /* Black sidebar */
+            width: 200px;
+            height: 100vh; /* Full height sidebar */
+            position: fixed; /* Fixed position */
+            top: 0;
+            left: 0;
+            padding: 20px;
+            transition: width 0.3s ease; /* Smooth transition */
+            z-index: 1000; /* Ensure it's above other content */
+        }
+
+        .sidebar:hover {
+            width: 250px; /* Expand on hover */
         }
 
         .banner {
-            background-color: #007bff; /* Comic book blue */
-            color: #fff;
             padding: 20px;
             text-align: center;
-            width: 100%;
+            cursor: pointer; /* Change cursor on hover */
+            background-color: #000; /* Black background for banner */
+            transition: background-color 0.3s ease; /* Smooth transition */
+            z-index: 1; /* Ensure it's above other content */
+            position: relative; /* Adjust positioning */
+        }
+
+        .banner:hover {
+            background-color: #007bff; /* Blue background on hover */
         }
 
         .banner h1 {
-            font-size: 36px;
+            font-size: 24px;
             margin-bottom: 10px;
+            font-family: 'Impact', sans-serif; /* Change font to Impact or any bold comic-style font */
+            color: #fff; /* White text */
         }
 
         nav ul {
             list-style-type: none;
-            display: flex;
-            align-items: center;
+            padding: 0;
         }
 
         nav ul li {
-            margin-right: 20px;
+            margin-bottom: 10px;
         }
 
         nav ul li a {
             color: #fff;
             text-decoration: none;
-            transition: color 0.3s ease;
+            font-family: 'Comic Sans MS', cursive, sans-serif; /* Change font to Comic Sans or any comic-style font */
+            font-size: 18px;
+            display: block;
+            padding: 10px;
+            border: 2px solid transparent; /* Initially transparent border */
+            transition: background-color 0.3s ease; /* Smooth transition for background color */
         }
 
         nav ul li a:hover {
-            color: #f0f0f0;
+            background-color: #007bff; /* Blue background on hover */
         }
 
-        .container {
-            max-width: 800px;
-            width: 100%;
-            padding: 20px;
+        .main-content {
+            margin-left: 220px; /* Adjust for sidebar width and spacing */
+            padding: 40px 20px;
+            display: flex;
+            justify-content: center; /* Center align the content horizontally */
         }
 
         .profile {
-            background-color: #fff;
+            background-color: #000;
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             margin-top: 20px;
+            width: 33%; /* Roughly one-third of the page width */
+            outline: 2px solid #fff; /* White outline */
         }
 
         .profile h1 {
@@ -97,16 +124,10 @@
             height: auto;
             display: block;
             margin-top: 10px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
-        h2 {
-            margin-top: 20px;
-            font-size: 20px;
-        }
-
-        p {
-            line-height: 1.6;
-        }
     </style>
 </head>
 <body>
@@ -126,6 +147,7 @@
             </ul>
         </nav>
     </div>
+<div class="main-content">
 <div class="container">
     <div class="profile">
         <h1>{{ name }} Profile</h1>
@@ -165,6 +187,6 @@
         <p>{{ summary }}</p>
     </div>
 </div>
-
+</div>
 </body>
 </html>
