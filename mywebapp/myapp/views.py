@@ -29,7 +29,7 @@ def recommendation_page(request):
         form = CharacterInputForm(request.POST)
         if form.is_valid():
             input_character = form.cleaned_data['character'].strip()
-            df = pd.read_csv('myapp/datasets/superheroes_power_matrix_filtered.csv')
+            df = pd.read_csv('myapp/datasets/merged_character_info.csv')
 
             # Filter characters based on those available in the cleaned character-image mapping CSV
             character_image_df = pd.read_csv('myapp/datasets/character_image_mapping_cleaned.csv')
