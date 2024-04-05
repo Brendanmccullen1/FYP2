@@ -159,3 +159,38 @@ def manga_recommendation_page(request):
     }
 
     return render(request, 'manga_recommendation_page.html', context)
+
+def manga_profile(request, manga_title):
+    # Read the CSV file containing manga information
+    manga_df = pd.read_csv('myapp/datasets/manga_updated.csv')
+
+    # Filter the data based on the manga title
+    manga_info = manga_df[manga_df['Title'] == manga_title]
+
+    # Check if the manga exists
+    if manga_info.empty:
+        return render(request, 'manga_not_found.html', {'manga_title': manga_title})
+
+    # Extract values from DataFrame
+    title = manga_info['Title'].iloc[0]
+    status = manga_info['Status'].iloc[0]
+    chapters = manga_info['Chapters'].iloc[0]
+    score = manga_info['Score'].iloc[0]
+    synopsis = manga_info['Synopsis'].iloc[0]
+    publish_period = manga_info['Publish_period'].iloc[0]
+    image_url = manga_info['image_url'].iloc[0]
+    manga_url = manga_info['manga_url'].iloc[0]
+
+    context = {
+        'image_url': image_url,
+        'title': title,
+        'status': status,
+        'chapters': chapters,
+        'score': score,
+        'synopsis': synopsis,
+        'publish_period': publish_period,
+        'manga_url': manga_url,
+        # Add other context data as needed
+    }
+
+    return render(request, 'manga_profile.html', context)

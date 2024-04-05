@@ -162,25 +162,26 @@
             </ul>
         </nav>
     </header>
- <section class="main-content">
- <section class="main-content">
-    <form method="post">
-        {% csrf_token %}
-        {{ form }}
-        <input type="submit" value="Get Recommendations">
-    </form>
+    <section class="main-content">
+        <form method="post">
+            {% csrf_token %}
+            {{ form }}
+            <input type="submit" value="Get Recommendations">
+        </form>
 
-    {% if recommendations %}
-        <p>Top 9 manga similar to {{ input_manga }}:</p>
-        <div class="grid-container">
-            {% for manga in recommendations %}
-                <div class="grid-item">
-                    <img src="{{ manga.image_url }}" alt="{{ manga.title }}">
-                    <p>{{ manga.title }}</p>
-                </div>
-            {% endfor %}
-        </div>
-    {% endif %}
-</section>
+        {% if recommendations %}
+            <p>Top 9 manga similar to {{ input_manga }}:</p>
+            <div class="grid-container">
+                {% for manga in recommendations %}
+                    <div class="grid-item">
+                        <a href="{% url 'manga_profile' manga.title %}">
+                            <img src="{{ manga.image_url }}" alt="{{ manga.title }}">
+                        </a>
+                        <p>{{ manga.title }}</p>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </section>
 </body>
 </html>

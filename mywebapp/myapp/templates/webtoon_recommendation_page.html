@@ -1,10 +1,10 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Webtoon Recommendations</title>
-  <style>
+    <style>
         /* Reset default browser styles */
         * {
             margin: 0;
@@ -13,114 +13,90 @@
         }
 
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Comic Sans MS', cursive, sans-serif; /* Change font to Comic Sans or any comic-style font */
             margin: 0;
             padding: 0;
-            background-color: #f9f9f9;
-            font-family: 'Knewave', cursive;
+            background-color: #000; /* Black background */
+            color: #fff; /* White text */
+        }
+
+        .sidebar {
+            background-color: #000; /* Black sidebar */
+            width: 200px;
+            height: 100vh; /* Full height sidebar */
+            position: fixed; /* Fixed position */
+            top: 0;
+            left: 0;
+            padding: 20px;
+            transition: width 0.3s ease; /* Smooth transition */
+            z-index: 1000; /* Ensure it's above other content */
+        }
+
+        .sidebar:hover {
+            width: 250px; /* Expand on hover */
         }
 
         .banner {
-            background-color: #007bff; /* Comic book blue */
-            color: #fff;
             padding: 20px;
             text-align: center;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            cursor: pointer; /* Change cursor on hover */
+            background-color: #000; /* Black background for banner */
+            transition: background-color 0.3s ease; /* Smooth transition */
+            z-index: 1; /* Ensure it's above other content */
+            position: relative; /* Adjust positioning */
+        }
+
+        .banner:hover {
+            background-color: #007bff; /* Blue background on hover */
         }
 
         .banner h1 {
-            font-size: 36px;
+            font-size: 24px;
             margin-bottom: 10px;
+            font-family: 'Impact', sans-serif; /* Change font to Impact or any bold comic-style font */
+            color: #fff; /* White text */
         }
 
         nav ul {
             list-style-type: none;
-            display: flex;
-            align-items: center;
+            padding: 0;
         }
 
         nav ul li {
-            margin-right: 20px;
+            margin-bottom: 10px;
         }
 
         nav ul li a {
             color: #fff;
             text-decoration: none;
-            transition: color 0.3s ease;
+            font-family: 'Comic Sans MS', cursive, sans-serif; /* Change font to Comic Sans or any comic-style font */
+            font-size: 18px;
+            display: block;
+            padding: 10px;
+            border: 2px solid transparent; /* Initially transparent border */
+            transition: background-color 0.3s ease; /* Smooth transition for background color */
         }
 
         nav ul li a:hover {
-            color: #f0f0f0;
-        }
-
-        .search-bar {
-            position: relative;
-        }
-
-        .search-bar input[type="text"] {
-            padding: 10px 15px;
-            border: 2px solid #ddd;
-            color: #333;
-            font-size: 16px;
-            font-family: 'Knewave', cursive;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            width: 200px;
-            height: 40px;
-            border-radius: 20px;
-            outline: none;
-            transition: border-color 0.3s ease;
-        }
-
-        .search-bar input[type="text"]:focus {
-            border-color: #007bff;
-        }
-
-        .search-bar ul {
-            position: absolute;
-            top: 50px;
-            left: 0;
-            background-color: #fff;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            padding: 10px 0;
-            display: none;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        .search-bar ul li {
-            padding: 10px 15px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        .search-bar ul li:hover {
-            background-color: #f0f0f0;
-        }
-
-        .search-bar input[type="text"]:focus + ul {
-            display: block;
+            background-color: #007bff; /* Blue background on hover */
         }
 
         .main-content {
-            max-width: 800px;
-            margin: 0 auto;
+            margin-left: 260px; /* Adjust for sidebar width and spacing */
             padding: 40px 20px;
-            text-align: center;
         }
 
         .main-content h2 {
             font-size: 32px;
             margin-bottom: 20px;
-            color: #333;
+            color: #fff;
+            font-family: 'Impact', sans-serif; /* Change font to Impact or any bold comic-style font */
         }
 
         .main-content p {
             font-size: 18px;
             line-height: 1.6;
-            color: #666;
+            color: #ccc; /* Light gray text */
         }
 
         .grid-container {
@@ -148,26 +124,61 @@
         .grid-item p {
             margin-top: 10px;
         }
+
+       .search-bar {
+            position: relative;
+            margin: 20px auto; /* Center the search bar horizontally */
+            text-align: center; /* Align text inside the search bar */
+        }
+
+        .search-bar input[type="text"] {
+            padding: 10px 15px;
+            border: 2px solid #fff; /* White border */
+            color: #fff;
+            font-size: 16px;
+            width: 300px; /* Adjust width as needed */
+            height: 40px;
+            border-radius: 20px;
+            outline: none;
+            background-color: transparent; /* Transparent background */
+        }
+
+        .search-bar input[type="text"]:focus {
+            border-color: #007bff; /* Blue border on focus */
+        }
+
+        .search-bar input[type="submit"] {
+            padding: 10px 20px;
+            border: none;
+            background-color: #007bff; /* Blue background */
+            color: #fff;
+            font-size: 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: background-color 0.3s ease; /* Smooth transition */
+        }
+
+        .search-bar input[type="submit"]:hover {
+            background-color: #0056b3; /* Darker blue on hover */
+        }
     </style>
 </head>
 <body>
-    <header class="banner">
-        <h1>Find Your Best Webtoon</h1>
-        <nav>
-            <ul>
-                <li><a href="{% url 'home' %}">Home</a></li>
-                <li><a href="{% url 'webtoon_recommendation_page' %}">webtoons</a></li>
-                <li><a href="{% url 'contact_us' %}">Contact Us</a></li>
-                <li><a href="{% url 'stores_near_you' %}">Stores Near You</a></li>
-                <li class="search-bar">
-                    <input type="text" placeholder="Search">
-                    <ul>
-                        <!-- Your search results will go here -->
-                    </ul>
-                </li>
-            </ul>
-        </nav>
-    </header>
+<div class="sidebar">
+    <div class="banner">
+        <h1>CBRAI</h1>
+    </div>
+    <nav>
+        <ul>
+            <li><a href="{% url 'home' %}">Home</a></li>
+            <li><a href="{% url 'webtoon_recommendation_page' %}">Webtoons</a></li>
+            <li><a href="{% url 'contact_us' %}">Contact Us</a></li>
+            <li><a href="{% url 'stores_near_you' %}">Stores Near You</a></li>
+            <li><a href="{% url 'recommendation_page' %}">Character Recommendation</a></li>
+            <li><a href="{% url 'manga_recommendations' %}">Manga</a></li>
+        </ul>
+    </nav>
+</div>
 <section class="main-content">
     <form method="post">
         {% csrf_token %}
@@ -175,22 +186,22 @@
         <input type="submit" value="Get Recommendations">
     </form>
 
- {% if input_webtoon %}
-            <h2>Top 10 Webtoons Similar to "{{ input_webtoon }}"</h2>
-            <div class="grid-container">
-                {% for webtoon, image_url in webtoon_images.items %}
-                    <div class="grid-item">
-                        <a href="{% url 'webtoon_profile' webtoon_name=webtoon %}">
-                            <img src="{{ image_url }}" alt="{{ webtoon }}">
-                        </a>
-                        <p>{{ webtoon }}</p>
-                    </div>
-                    {% if forloop.counter|divisibleby:3 and not forloop.last %}
-                        </div><div class="grid-container">
-                    {% endif %}
-                {% endfor %}
-            </div>
-        {% endif %}
-    </section>
+    {% if input_webtoon %}
+        <h2>Top 10 Webtoons Similar to "{{ input_webtoon }}"</h2>
+        <div class="grid-container">
+            {% for webtoon, image_url in webtoon_images.items %}
+                <div class="grid-item">
+                    <a href="{% url 'webtoon_profile' webtoon_name=webtoon %}">
+                        <img src="{{ image_url }}" alt="{{ webtoon }}">
+                    </a>
+                    <p>{{ webtoon }}</p>
+                </div>
+                {% if forloop.counter|divisibleby:3 and not forloop.last %}
+                    </div><div class="grid-container">
+                {% endif %}
+            {% endfor %}
+        </div>
+    {% endif %}
+</section>
 </body>
 </html>

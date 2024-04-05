@@ -6,162 +6,136 @@
     <title>Home</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
-        /* Reset default browser styles */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+ /* Reset default browser styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f9f9f9;
-            font-family: 'Knewave', cursive;
-        }
+body {
+    font-family: 'Comic Sans MS', cursive, sans-serif; /* Change font to Comic Sans or any comic-style font */
+    margin: 0;
+    padding: 0;
+    background-color: #000; /* Black background */
+    color: #fff; /* White text */
+}
 
-        .banner {
-            background-color: #007bff; /* Comic book blue */
-            color: #fff;
-            padding: 20px;
-            text-align: center;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+.sidebar {
+    background-color: #000; /* Black sidebar */
+    width: 200px;
+    height: 100vh; /* Full height sidebar */
+    position: fixed; /* Fixed position */
+    top: 0;
+    left: 0;
+    padding: 20px;
+    transition: width 0.3s ease; /* Smooth transition */
+    z-index: 1000; /* Ensure it's above other content */
+}
 
-        .banner h1 {
-            font-size: 36px;
-            margin-bottom: 10px;
-        }
+.sidebar:hover {
+    width: 250px; /* Expand on hover */
+}
 
-        nav ul {
-            list-style-type: none;
-            display: flex;
-            align-items: center;
-        }
+.banner {
+    padding: 20px;
+    text-align: center;
+    cursor: pointer; /* Change cursor on hover */
+    background-color: #000; /* Black background for banner */
+    transition: background-color 0.3s ease; /* Smooth transition */
+    z-index: 1; /* Ensure it's above other content */
+    position: relative; /* Adjust positioning */
+}
 
-        nav ul li {
-            margin-right: 20px;
-        }
+.banner:hover {
+    background-color: #007bff; /* Blue background on hover */
+}
 
-        nav ul li a {
-            color: #fff;
-            text-decoration: none;
-            transition: color 0.3s ease;
-        }
+.banner h1 {
+    font-size: 24px;
+    margin-bottom: 10px;
+    font-family: 'Impact', sans-serif; /* Change font to Impact or any bold comic-style font */
+    color: #fff; /* White text */
+}
 
-        nav ul li a:hover {
-            color: #f0f0f0;
-        }
+nav ul {
+    list-style-type: none;
+    padding: 0;
+}
 
-        .search-bar {
-            position: relative;
-        }
+nav ul li {
+    margin-bottom: 10px;
+}
 
-        .search-bar input[type="text"] {
-            padding: 10px 15px;
-            border: 2px solid #ddd;
-            color: #333;
-            font-size: 16px;
-            font-family: 'Knewave', cursive;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            width: 200px;
-            height: 40px;
-            border-radius: 20px;
-            outline: none;
-            transition: border-color 0.3s ease;
-        }
+nav ul li a {
+    color: #fff;
+    text-decoration: none;
+    font-family: 'Comic Sans MS', cursive, sans-serif; /* Change font to Comic Sans or any comic-style font */
+    font-size: 18px;
+    display: block;
+    padding: 10px;
+    border: 2px solid transparent; /* Initially transparent border */
+    transition: background-color 0.3s ease; /* Smooth transition for background color */
+}
 
-        .search-bar input[type="text"]:focus {
-            border-color: #007bff;
-        }
+nav ul li a:hover {
+    background-color: #007bff; /* Blue background on hover */
+}
 
-        .search-bar ul {
-            position: absolute;
-            top: 50px;
-            left: 0;
-            background-color: #fff;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            padding: 10px 0;
-            display: none;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
+.main-content {
+    margin-left: 260px; /* Adjust for sidebar width and spacing */
+    padding: 40px 20px;
+}
 
-        .search-bar ul li {
-            padding: 10px 15px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
+.main-content h2 {
+    font-size: 32px;
+    margin-bottom: 20px;
+    color: #fff;
+    font-family: 'Impact', sans-serif; /* Change font to Impact or any bold comic-style font */
+}
 
-        .search-bar ul li:hover {
-            background-color: #f0f0f0;
-        }
+.main-content p {
+    font-size: 18px;
+    line-height: 1.6;
+    color: #ccc; /* Light gray text */
+}
 
-        .search-bar input[type="text"]:focus + ul {
-            display: block;
-        }
+.comic-covers {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+}
 
-        .comic-covers {
-            display: flex;
-            justify-content: space-between;
-            padding: 20px;
-        }
+.comic-cover img {
+    max-width: 220px; /* Increase size of comic covers */
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
 
-        .comic-cover img {
-            max-width: 200px;
-            border-radius: 10px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease;
-        }
+.comic-cover img:hover {
+    transform: scale(1.1); /* Increase scale on hover */
+}
 
-        .comic-cover img:hover {
-            transform: scale(1.05);
-        }
-
-        .text-content {
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 40px 20px;
-            text-align: center;
-        }
-
-        .text-content h2 {
-            font-size: 32px;
-            margin-bottom: 20px;
-            color: #333;
-        }
-
-        .text-content p {
-            font-size: 18px;
-            line-height: 1.6;
-            color: #666;
-        }
     </style>
 </head>
 <body>
-    <header class="banner">
-        <h1>Find Your Best Comic Book</h1>
+    <div class="sidebar">
+        <div class="banner">
+            <h1>CBRAI</h1>
+        </div>
         <nav>
             <ul>
                 <li><a href="{% url 'home' %}">Home</a></li>
-                <li><a href="{% url 'webtoon_recommendation_page' %}">webtoons</a></li>
+                <li><a href="{% url 'webtoon_recommendation_page' %}">Webtoons</a></li>
                 <li><a href="{% url 'contact_us' %}">Contact Us</a></li>
                 <li><a href="{% url 'stores_near_you' %}">Stores Near You</a></li>
                 <li><a href="{% url 'recommendation_page' %}">Character Recommendation</a></li>
                 <li><a href="{% url 'manga_recommendations' %}">Manga</a></li>
-                    <input type="text" placeholder="Search">
-                    <ul>
-                        <!-- Your search results will go here -->
-                    </ul>
-                </li>
             </ul>
         </nav>
-    </header>
-    <section class="main-content">
+    </div>
+    <div class="main-content">
         <div class="text-content">
             <h2>Discover the World of Comics</h2>
             <p>Welcome to our comic book and character recommendation website! Dive into the thrilling world of comics with us and discover a universe filled with captivating stories, iconic characters, and breathtaking artwork. Whether you're a seasoned comic enthusiast or just starting your journey, our site offers curated recommendations to suit every taste. Explore our vast collection of comics, find hidden gems, and uncover new favorites. Plus, our character recommendation feature helps you discover heroes and villains tailored to your preferences. Join us as we embark on an epic adventure through the pages of comic history. Start exploring today and unleash your inner superhero!</p>
@@ -177,6 +151,6 @@
                 <img src="https://upload.wikimedia.org/wikipedia/en/6/6d/Wolverine_%28vol._1%29_1.jpg" alt="Comic Book 3">
             </div>
         </div>
-    </section>
+    </div>
 </body>
 </html>
